@@ -23,8 +23,7 @@
 - [8. Local Development & Vitest Testing Guide](#8-local-development--vitest-testing-guide)
 - [9. Production Deployment Guide](#9-production-deployment-guide)
 - [10. Codebase Folder Structure](#10-codebase-folder-structure)
-- [11. 5-Minute Hackathon Pitch Script & Judge Q&A](#11-5-minute-hackathon-pitch-script--judge-qa)
-- [12. License & Author Attribution](#12-license--author-attribution)
+- [11. License & Author Attribution](#11-license--author-attribution)
 
 ---
 
@@ -213,13 +212,7 @@ CorpusAI/
 
 ---
 
-## 11. 5-Minute Hackathon Pitch Script & Judge Q&A
-
-Refer to our complete 22-Section Pitch Playbook in [`system_architecture_and_pitch_guide.md`](file:///C:/Users/Yash/.gemini/antigravity/brain/78d55c41-c918-4bcf-b2db-20435c61dc6b/system_architecture_and_pitch_guide.md) for the full pitch script, visual stop breakdown, and answers to expected judge questions!
-
----
-
-## 12. License & Author Attribution
+## 11. License & Author Attribution
 
 - **Lead Contributor & Engineer:** **Harshita Asija** ([`asijaharshita@gmail.com`](mailto:asijaharshita@gmail.com))
 - **Repository:** [`https://github.com/HSVM-exe/Corpus-AI`](https://github.com/HSVM-exe/Corpus-AI)
