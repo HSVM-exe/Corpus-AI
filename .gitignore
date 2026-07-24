@@ -24,3 +24,7 @@ reports
 *.sln
 *.sw?
 code_template.zip
+
+# Environment variables
+.env
+.env*.local
