@@ -57,58 +57,50 @@ export default function AppTopbar() {
   const handleRunDemoMode = () => {
     setRunningDemo(true);
     playSuccessChime();
-    toast.info("▶ 2-Min Demo Mode: Step 1/6 — Kickoff Initiative", {
-      description: "Agents evaluating corporate campaign goal and budget request...",
-      duration: 5000,
+    toast.info("▶ 60-Sec Demo: Step 1/5 — Command Deck & FSM Timeline", {
+      description: "Agents evaluating campaign goal under Orchestrator FSM state machine...",
+      duration: 3500,
     });
 
-    // Step 2: D3 Lineage Graph at 20s
+    // Step 2: D3 Lineage Graph at 12s
     setTimeout(() => {
       playSuccessChime();
-      toast.info("Step 2/6 — D3 Force-Directed Network Lineage", {
-        description: "Mapping agent-to-agent communication channels & telemetry HUD...",
-        duration: 5000,
+      toast.info("Step 2/5 — D3 Force-Directed Network Lineage Graph", {
+        description: "Visualizing inter-agent communication channels & telemetry HUD...",
+        duration: 3500,
       });
       navigate("/network");
-    }, 20000);
+    }, 12000);
 
-    // Step 3: Governance Lab & Nash Bargaining at 40s
+    // Step 3: Negotiation Dialogue Stream at 24s
     setTimeout(() => {
       playSuccessChime();
-      toast.info("Step 3/6 — Nash Bargaining Kernel Optimization", {
-        description: "Solving Pareto efficiency equilibrium between Marketing ($15k) & Finance ($8k)...",
-        duration: 5000,
+      toast.info("Step 3/5 — Live Agent Dialogue & Negotiation Stream", {
+        description: "Real-time agent-to-agent negotiations & collapsible reasoning cards...",
+        duration: 3500,
+      });
+      navigate("/negotiation");
+    }, 24000);
+
+    // Step 4: Governance Lab & Nash Bargaining at 36s
+    setTimeout(() => {
+      playSuccessChime();
+      toast.info("Step 4/5 — Policy Sandbox & Nash Bargaining Kernel", {
+        description: "Computing Pareto efficiency equilibrium between Marketing & Finance...",
+        duration: 3500,
       });
       navigate("/lab");
-    }, 40000);
+    }, 36000);
 
-    // Step 4: Red-Team Attack Blocked at 65s
+    // Step 5: Red-Team Block & Completion at 48s
     setTimeout(() => {
       playShieldHum();
-      toast.error("Step 4/6 — Red-Team Prompt Injection Blocked!", {
-        description: "Term-frequency vector classifier caught prompt injection (Similarity 84%).",
-        duration: 6000,
-      });
-    }, 65000);
-
-    // Step 5: Boardroom Escalation at 85s
-    setTimeout(() => {
-      playAlertTone();
-      toast.warning("Step 5/6 — Boardroom Debate Escalation", {
-        description: "High-risk spending > $30k triggered 3-persona boardroom session (Optimist, Auditor, Advocate).",
-        duration: 6000,
-      });
-    }, 85000);
-
-    // Step 6: PDF Compliance Export & Completion at 110s
-    setTimeout(() => {
-      playSuccessChime();
-      toast.success("Step 6/6 — 2-Minute Demo Complete!", {
-        description: "Generating 1-click Governance Compliance Audit PDF Report...",
-        duration: 6000,
+      toast.error("Step 5/5 — Red-Team Injection Blocked!", {
+        description: "Vector classifier caught attack (84% similarity). Demo complete!",
+        duration: 4000,
       });
       setRunningDemo(false);
-    }, 110000);
+    }, 48000);
   };
 
   usePresenterHotkeys(handleRunDemoMode);
