@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Loader2, Play } from "lucide-react";
+import { Loader2, Play, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -14,16 +14,32 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
 import { useCorpusData } from "@/context/CorpusDataContext";
 
 const DEFAULT_GOAL =
-  "Launch a marketing campaign for our new feature, budget capped by company policy.";
+  "Launch a global AI marketing campaign for product v2.0, budget capped at $15,000 by policy.";
+
+const GOAL_PRESETS = [
+  {
+    label: "🎯 Q4 Marketing Launch",
+    goal: "Launch Q4 digital advertising campaign across Google and LinkedIn with $12,000 budget cap.",
+  },
+  {
+    label: "💰 Infrastructure Scaling",
+    goal: "Expand multi-region Kubernetes clusters for agent workloads with $18,000 budget allocation.",
+  },
+  {
+    label: "⚡ Security Audit & Penetration",
+    goal: "Conduct quarterly security audit and red-team penetration test with $9,500 budget cap.",
+  },
+];
 
 export default function KickoffDialog() {
   const { submitInitiative, submitting } = useCorpusData();
   const [open, setOpen] = useState(false);
   const [goal, setGoal] = useState(DEFAULT_GOAL);
-  const [owner, setOwner] = useState("John Doe");
+  const [owner, setOwner] = useState("John Doe (Product Lead)");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,7 +51,6 @@ export default function KickoffDialog() {
       await submitInitiative(goal, owner);
       toast.success("Initiative launched! Agents are evaluating the goal.");
       setOpen(false);
-      setGoal(DEFAULT_GOAL);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to launch initiative.");
     }
@@ -44,43 +59,71 @@ export default function KickoffDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="glow" className="gap-2">
+        <Button variant="glow" className="gap-2 font-semibold">
           <Play size={16} />
           New Initiative
         </Button>
       </DialogTrigger>
-      <DialogContent className="glass-panel border-primary/20 sm:max-w-lg">
+      <DialogContent className="glass-panel border-primary/30 sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Launch New Initiative</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="flex items-center gap-2 text-lg font-bold">
+            <Sparkles size={18} className="text-primary" />
+            Launch New Corporate Initiative
+          </DialogTitle>
+          <DialogDescription className="text-xs text-muted-foreground">
             Submit a company goal to the multi-agent orchestrator. Marketing and Finance
             will negotiate a plan under FSM-guarded autonomy.
           </DialogDescription>
         </DialogHeader>
+
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="flex flex-col gap-2">
-            <Label htmlFor="goal">Company Goal / Objective</Label>
+            <div className="flex items-center justify-between">
+              <Label htmlFor="goal" className="text-xs font-semibold">
+                Company Goal / Objective
+              </Label>
+              <span className="text-[0.65rem] text-muted-foreground">Quick Presets:</span>
+            </div>
+            
+            <div className="flex flex-wrap gap-1.5 mb-1">
+              {GOAL_PRESETS.map((preset, idx) => (
+                <button
+                  type="button"
+                  key={idx}
+                  onClick={() => setGoal(preset.goal)}
+                  className="rounded-md border border-border/60 bg-background/40 px-2 py-1 text-[0.65rem] text-foreground/90 transition-colors hover:border-primary/50 hover:bg-primary/10"
+                >
+                  {preset.label}
+                </button>
+              ))}
+            </div>
+
             <Textarea
               id="goal"
               value={goal}
               onChange={(e) => setGoal(e.target.value)}
-              placeholder="Enter goal for the company agents..."
+              placeholder="Type your initiative goal here..."
               required
-              className="min-h-[100px] bg-background/60"
+              className="min-h-[110px] bg-background/80 text-foreground border-border/80 focus:border-primary text-sm font-medium focus-visible:ring-primary/40 placeholder:text-muted-foreground"
             />
           </div>
+
           <div className="flex flex-col gap-2">
-            <Label htmlFor="owner">Initiator Name (Owner)</Label>
+            <Label htmlFor="owner" className="text-xs font-semibold">
+              Initiator Name (Owner)
+            </Label>
             <Input
               id="owner"
               value={owner}
               onChange={(e) => setOwner(e.target.value)}
               required
-              className="bg-background/60"
+              placeholder="e.g. Jane Smith (CAIO)"
+              className="bg-background/80 text-foreground border-border/80 focus:border-primary text-sm font-medium focus-visible:ring-primary/40"
             />
           </div>
-          <DialogFooter>
-            <Button type="submit" variant="glow" disabled={submitting} className="w-full gap-2">
+
+          <DialogFooter className="mt-2">
+            <Button type="submit" variant="glow" disabled={submitting} className="w-full gap-2 font-semibold">
               {submitting && <Loader2 size={16} className="animate-spin" />}
               {submitting ? "Triggering Agents..." : "Kick Off Goal"}
             </Button>
