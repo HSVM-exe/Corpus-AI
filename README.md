@@ -23,7 +23,7 @@
 - [8. Local Development & Vitest Testing Guide](#8-local-development--vitest-testing-guide)
 - [9. Production Deployment Guide](#9-production-deployment-guide)
 - [10. Codebase Folder Structure](#10-codebase-folder-structure)
-- [11. License & Author Attribution](#11-license--author-attribution)
+- [11. License](#11-license)
 
 ---
 
@@ -212,8 +212,7 @@ CorpusAI/
 
 ---
 
-## 11. License & Author Attribution
+## 11. License
 
-- **Lead Contributor & Engineer:** **Harshita Asija** ([`asijaharshita@gmail.com`](mailto:asijaharshita@gmail.com))
 - **Repository:** [`https://github.com/HSVM-exe/Corpus-AI`](https://github.com/HSVM-exe/Corpus-AI)
 - **License:** MIT License — Open for Enterprise AI Safety Research.
