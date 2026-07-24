@@ -57,39 +57,58 @@ export default function AppTopbar() {
   const handleRunDemoMode = () => {
     setRunningDemo(true);
     playSuccessChime();
-    toast.info("▶ Demo Mode Started: Step 1/5 — Kickoff Goal", {
-      description: "Agents evaluating campaign budget request...",
+    toast.info("▶ 2-Min Demo Mode: Step 1/6 — Kickoff Initiative", {
+      description: "Agents evaluating corporate campaign goal and budget request...",
+      duration: 5000,
     });
 
+    // Step 2: D3 Lineage Graph at 20s
     setTimeout(() => {
       playSuccessChime();
-      toast.info("Step 2/5 — Nash Bargaining Optimization", {
-        description: "Solving Pareto efficiency between Marketing & Finance...",
+      toast.info("Step 2/6 — D3 Force-Directed Network Lineage", {
+        description: "Mapping agent-to-agent communication channels & telemetry HUD...",
+        duration: 5000,
+      });
+      navigate("/network");
+    }, 20000);
+
+    // Step 3: Governance Lab & Nash Bargaining at 40s
+    setTimeout(() => {
+      playSuccessChime();
+      toast.info("Step 3/6 — Nash Bargaining Kernel Optimization", {
+        description: "Solving Pareto efficiency equilibrium between Marketing ($15k) & Finance ($8k)...",
+        duration: 5000,
       });
       navigate("/lab");
-    }, 2500);
+    }, 40000);
 
+    // Step 4: Red-Team Attack Blocked at 65s
     setTimeout(() => {
       playShieldHum();
-      toast.error("Step 3/5 — Red-Team Attack Blocked!", {
-        description: "TF-IDF classifier caught prompt injection (Similarity 84%).",
+      toast.error("Step 4/6 — Red-Team Prompt Injection Blocked!", {
+        description: "Term-frequency vector classifier caught prompt injection (Similarity 84%).",
+        duration: 6000,
       });
-    }, 5000);
+    }, 65000);
 
+    // Step 5: Boardroom Escalation at 85s
     setTimeout(() => {
       playAlertTone();
-      toast.warning("Step 4/5 — Boardroom Debate Escalation", {
-        description: "Budget request > $30k triggered 3-persona boardroom session.",
+      toast.warning("Step 5/6 — Boardroom Debate Escalation", {
+        description: "High-risk spending > $30k triggered 3-persona boardroom session (Optimist, Auditor, Advocate).",
+        duration: 6000,
       });
-    }, 7500);
+    }, 85000);
 
+    // Step 6: PDF Compliance Export & Completion at 110s
     setTimeout(() => {
       playSuccessChime();
-      toast.success("Step 5/5 — Demo Complete!", {
-        description: "Generating 1-click Compliance Audit PDF Report...",
+      toast.success("Step 6/6 — 2-Minute Demo Complete!", {
+        description: "Generating 1-click Governance Compliance Audit PDF Report...",
+        duration: 6000,
       });
       setRunningDemo(false);
-    }, 10000);
+    }, 110000);
   };
 
   usePresenterHotkeys(handleRunDemoMode);
