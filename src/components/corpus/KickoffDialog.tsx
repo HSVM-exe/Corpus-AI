@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Loader2, Play } from "lucide-react";
+import { toast } from "sonner";
 import {
   Dialog,
   DialogContent,
@@ -26,12 +27,17 @@ export default function KickoffDialog() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (goal.trim().length < 10) {
+      toast.error("Initiative goal must be at least 10 characters long.");
+      return;
+    }
     try {
       await submitInitiative(goal, owner);
+      toast.success("Initiative launched! Agents are evaluating the goal.");
       setOpen(false);
       setGoal(DEFAULT_GOAL);
-    } catch {
-      // error surfaced via context state
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to launch initiative.");
     }
   };
 

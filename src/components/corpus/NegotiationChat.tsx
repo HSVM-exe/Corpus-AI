@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { motion } from "framer-motion";
 import type { AgentLog } from "@/lib/corpus/types";
@@ -12,6 +12,11 @@ interface NegotiationChatProps {
 
 export default function NegotiationChat({ logs }: NegotiationChatProps) {
   const [expandedLogId, setExpandedLogId] = useState<string | null>(null);
+  const chatEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [logs.length]);
 
   if (logs.length === 0) {
     return (
@@ -79,6 +84,7 @@ export default function NegotiationChat({ logs }: NegotiationChatProps) {
           </motion.div>
         );
       })}
+      <div ref={chatEndRef} />
     </div>
   );
 }
