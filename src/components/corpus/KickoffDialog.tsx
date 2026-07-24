@@ -64,7 +64,7 @@ export default function KickoffDialog() {
           New Initiative
         </Button>
       </DialogTrigger>
-      <DialogContent className="glass-panel border-primary/30 sm:max-w-lg">
+      <DialogContent className="border-primary/40 sm:max-w-lg bg-card/95 text-foreground shadow-2xl backdrop-blur-2xl">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-lg font-bold">
             <Sparkles size={18} className="text-primary" />
