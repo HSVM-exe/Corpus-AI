@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FileWarning, Scale } from "lucide-react";
+import { FileWarning, Lock, Scale } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -16,6 +16,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { draftManualAmendment, ratifyAmendment } from "@/lib/lab/api";
 import { useLabData } from "@/context/LabDataContext";
+import { useAuth } from "@/context/AuthContext";
 import type { Constitution, ConstitutionRules } from "@/lib/lab/types";
 
 const DEFAULT_RULES: ConstitutionRules = {
@@ -27,6 +28,7 @@ const DEFAULT_RULES: ConstitutionRules = {
 
 export default function ConstitutionPanel() {
   const { constitution, pendingAmendment, refresh } = useLabData();
+  const { roleInfo } = useAuth();
   const [draftRules, setDraftRules] = useState<ConstitutionRules | null>(null);
   const [draftVersion, setDraftVersion] = useState<Constitution | null>(null);
   const [ratifying, setRatifying] = useState(false);
@@ -35,6 +37,7 @@ export default function ConstitutionPanel() {
   const rules = draftRules ?? constitution?.rules ?? DEFAULT_RULES;
 
   const updateRule = <K extends keyof ConstitutionRules>(key: K, value: ConstitutionRules[K]) => {
+    if (!roleInfo.canEditConstitution) return;
     setDraftRules({ ...rules, [key]: value });
   };
 
@@ -81,12 +84,19 @@ export default function ConstitutionPanel() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center gap-2">
-        <Scale size={16} className="text-primary" />
-        <span className="text-sm font-semibold">Constitution</span>
-        {constitution && (
-          <Badge variant="secondary" className="text-[0.65rem]">
-            v{constitution.version}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Scale size={16} className="text-primary" />
+          <span className="text-sm font-semibold">Constitution</span>
+          {constitution && (
+            <Badge variant="secondary" className="text-[0.65rem]">
+              v{constitution.version}
+            </Badge>
+          )}
+        </div>
+        {!roleInfo.canEditConstitution && (
+          <Badge variant="outline" className="gap-1 text-[0.65rem] border-warning/40 text-warning">
+            <Lock size={10} /> Read-Only ({roleInfo.badge})
           </Badge>
         )}
       </div>
