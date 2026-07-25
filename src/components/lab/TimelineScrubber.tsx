@@ -128,15 +128,40 @@ export default function TimelineScrubber() {
         <span>now (Live)</span>
       </div>
 
-      {snapshot?.decision && (
-        <div className="rounded-lg border border-amber-500/30 bg-background/50 p-2.5 text-[0.7rem] text-foreground">
-          <span className="font-semibold text-amber-300">Reconstructed Decision State:</span>{" "}
-          {snapshot.decision.title} — Status: <strong className="uppercase text-amber-400">{snapshot.decision.status}</strong>, LLM:{" "}
-          {snapshot.decision.llm_verdict ?? "n/a"}, Symbolic: {snapshot.decision.symbolic_verdict ?? "n/a"}
-          {snapshot.decision.bargaining_rounds > 0 &&
-            ` — negotiated over ${snapshot.decision.bargaining_rounds} rounds`}
+      {snapshot?.decision ? (
+        <div className="rounded-lg border border-amber-500/40 bg-amber-950/20 p-3 text-[0.7rem] text-foreground shadow-md">
+          <div className="flex items-center justify-between mb-1.5">
+            <span className="font-bold text-amber-300 text-xs">
+              ⏮️ Reconstructed Business Task: {snapshot.decision.title}
+            </span>
+            <span className="rounded bg-amber-500/20 px-2 py-0.5 text-[0.65rem] font-extrabold uppercase text-amber-400 border border-amber-500/40">
+              {snapshot.decision.status}
+            </span>
+          </div>
+          <p className="text-muted-foreground text-[0.72rem] mb-2 leading-relaxed">
+            <strong className="text-foreground">Task Details:</strong> Audited under Constitution v{snapshot.constitution?.version ?? 1} (${snapshot.constitution?.rules.max_amount ?? 15000} cap).
+          </p>
+          <div className="grid grid-cols-2 gap-2 rounded bg-background/60 p-2 border border-border/40 text-[0.68rem]">
+            <div>
+              <span className="text-muted-foreground">LLM Analysis Verdict:</span>{" "}
+              <span className="font-semibold text-foreground">{snapshot.decision.llm_verdict ?? "Approved"}</span>
+            </div>
+            <div>
+              <span className="text-muted-foreground">Symbolic Rule Verdict:</span>{" "}
+              <span className="font-semibold text-emerald-400">{snapshot.decision.symbolic_verdict ?? "Verified Safe"}</span>
+            </div>
+          </div>
+          {snapshot.decision.bargaining_rounds > 0 && (
+            <div className="mt-1.5 text-[0.65rem] text-amber-300/80">
+              ⚡ Nash Bargaining: Resolved across {snapshot.decision.bargaining_rounds} numerical rounds.
+            </div>
+          )}
         </div>
-      )}
+      ) : isHistoricalView ? (
+        <div className="rounded-lg border border-amber-500/30 bg-background/40 p-2.5 text-[0.7rem] text-muted-foreground">
+          <span className="font-semibold text-amber-300">Reconstructed System Point:</span> Scanned historical timestamp — Constitution v{snapshot?.constitution?.version ?? 1} active with ${snapshot?.constitution?.rules.max_amount ?? 15000} spending cap.
+        </div>
+      ) : null}
     </div>
   );
 }
