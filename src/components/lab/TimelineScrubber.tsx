@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { History } from "lucide-react";
+import { History, RotateCcw } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
+import { Button } from "@/components/ui/button";
 import { fetchConstitutionHistory, fetchHistoryAt } from "@/lib/lab/api";
 import type { HistorySnapshot } from "@/lib/lab/api";
 import type { Constitution } from "@/lib/lab/types";
@@ -14,7 +15,7 @@ function timeToPercent(iso: string, rangeStartMs: number, rangeMs: number): numb
 }
 
 export default function TimelineScrubber() {
-  const { pendingAmendment } = useLabData();
+  const { pendingAmendment, applyHistoricalSnapshot, isHistoricalView } = useLabData();
   const [percent, setPercent] = useState(100);
   const [snapshot, setSnapshot] = useState<HistorySnapshot | null>(null);
   const [loading, setLoading] = useState(false);
@@ -32,11 +33,18 @@ export default function TimelineScrubber() {
 
   const handleChange = async ([value]: number[]) => {
     setPercent(value);
+    if (value >= 99) {
+      setSnapshot(null);
+      applyHistoricalSnapshot(null);
+      return;
+    }
+
     const targetTime = now - ((100 - value) / 100) * rangeMs;
     setLoading(true);
     try {
       const result = await fetchHistoryAt(new Date(targetTime).toISOString());
       setSnapshot(result);
+      applyHistoricalSnapshot(result);
     } catch (err) {
       console.error("History fetch failed:", err);
     } finally {
@@ -44,8 +52,13 @@ export default function TimelineScrubber() {
     }
   };
 
-  // Discrete tick marks: one per constitution version change (amendment
-  // ratification), positioned along the -48h..now range.
+  const handleResetToLive = () => {
+    setPercent(100);
+    setSnapshot(null);
+    applyHistoricalSnapshot(null);
+  };
+
+  // Discrete tick marks: one per constitution version change
   const ticks = constitutionHistory
     .filter((c) => {
       const t = new Date(c.effective_from).getTime();
@@ -58,21 +71,44 @@ export default function TimelineScrubber() {
     }));
 
   return (
-    <div className="glass-panel flex w-full flex-col gap-3 rounded-xl p-4">
+    <div className={`glass-panel flex w-full flex-col gap-3 rounded-xl p-4 transition-all ${
+      isHistoricalView ? "border-amber-500/50 bg-amber-500/5 shadow-lg shadow-amber-500/10" : ""
+    }`}>
       <div className="flex items-center justify-between text-xs">
         <div className="flex items-center gap-2 font-semibold text-foreground">
-          <History size={14} className="text-primary" />
+          <History size={14} className={isHistoricalView ? "text-amber-400 animate-pulse" : "text-primary"} />
           Time-Travel Debugger
+          {isHistoricalView && (
+            <span className="rounded-md border border-amber-500/40 bg-amber-500/20 px-2 py-0.5 text-[0.65rem] font-bold text-amber-300">
+              Historical View Active (v{snapshot?.constitution?.version ?? "Past"})
+            </span>
+          )}
         </div>
-        <span className="text-muted-foreground">
-          {loading
-            ? "Reconstructing..."
-            : snapshot?.constitution
-              ? `Constitution v${snapshot.constitution.version} active — max_amount $${snapshot.constitution.rules.max_amount}, blocklist v${snapshot.blocklistVersion}`
-              : "Scrub to reconstruct historical state"}
-        </span>
+        
+        <div className="flex items-center gap-2">
+          {isHistoricalView && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleResetToLive}
+              className="h-6 gap-1 border-amber-500/40 px-2 text-[0.65rem] text-amber-300 hover:bg-amber-500/20"
+            >
+              <RotateCcw size={10} />
+              Return to Live (Now)
+            </Button>
+          )}
+          <span className="text-muted-foreground">
+            {loading
+              ? "Reconstructing historical state..."
+              : snapshot?.constitution
+                ? `Restored v${snapshot.constitution.version} — max spend $${snapshot.constitution.rules.max_amount}`
+                : "Scrub to reconstruct past system state"}
+          </span>
+        </div>
       </div>
+
       <Slider value={[percent]} onValueChange={handleChange} min={0} max={100} step={1} />
+
       <div className="relative h-4">
         {ticks.map((tick) => (
           <div
@@ -82,19 +118,21 @@ export default function TimelineScrubber() {
             title={`Constitution v${tick.version} (${tick.source}) ratified here`}
           >
             <div className="h-2 w-0.5 bg-primary" />
-            <span className="mt-0.5 text-[0.55rem] text-primary">v{tick.version}</span>
+            <span className="mt-0.5 text-[0.55rem] text-primary font-bold">v{tick.version}</span>
           </div>
         ))}
       </div>
+
       <div className="flex justify-between text-[0.65rem] text-muted-foreground">
-        <span>-{RANGE_HOURS}h</span>
-        <span>now</span>
+        <span>-{RANGE_HOURS}h (Past)</span>
+        <span>now (Live)</span>
       </div>
+
       {snapshot?.decision && (
-        <div className="rounded-lg border border-border/50 bg-background/30 p-2.5 text-[0.7rem] text-muted-foreground">
-          <span className="font-semibold text-foreground">Reconstructed decision state:</span>{" "}
-          {snapshot.decision.title} — status {snapshot.decision.status}, LLM:{" "}
-          {snapshot.decision.llm_verdict ?? "n/a"}, symbolic: {snapshot.decision.symbolic_verdict ?? "n/a"}
+        <div className="rounded-lg border border-amber-500/30 bg-background/50 p-2.5 text-[0.7rem] text-foreground">
+          <span className="font-semibold text-amber-300">Reconstructed Decision State:</span>{" "}
+          {snapshot.decision.title} — Status: <strong className="uppercase text-amber-400">{snapshot.decision.status}</strong>, LLM:{" "}
+          {snapshot.decision.llm_verdict ?? "n/a"}, Symbolic: {snapshot.decision.symbolic_verdict ?? "n/a"}
           {snapshot.decision.bargaining_rounds > 0 &&
             ` — negotiated over ${snapshot.decision.bargaining_rounds} rounds`}
         </div>

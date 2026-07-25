@@ -27,7 +27,7 @@ const DEFAULT_RULES: ConstitutionRules = {
 };
 
 export default function ConstitutionPanel() {
-  const { constitution, pendingAmendment, refresh } = useLabData();
+  const { constitution, pendingAmendment, refresh, isHistoricalView } = useLabData();
   const { roleInfo } = useAuth();
   const [draftRules, setDraftRules] = useState<ConstitutionRules | null>(null);
   const [draftVersion, setDraftVersion] = useState<Constitution | null>(null);
@@ -37,7 +37,7 @@ export default function ConstitutionPanel() {
   const rules = draftRules ?? constitution?.rules ?? DEFAULT_RULES;
 
   const updateRule = <K extends keyof ConstitutionRules>(key: K, value: ConstitutionRules[K]) => {
-    if (!roleInfo.canEditConstitution) return;
+    if (!roleInfo.canEditConstitution || isHistoricalView) return;
     setDraftRules({ ...rules, [key]: value });
   };
 
