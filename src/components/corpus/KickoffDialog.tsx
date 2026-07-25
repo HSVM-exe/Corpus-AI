@@ -22,16 +22,16 @@ const DEFAULT_GOAL =
 
 const GOAL_PRESETS = [
   {
-    label: "🎯 Q4 Marketing Launch",
-    goal: "Launch Q4 digital advertising campaign across Google and LinkedIn with $12,000 budget cap.",
+    label: "Marketing Campaign",
+    goal: "Launch digital marketing campaign across advertising channels with $12,000 budget cap.",
   },
   {
-    label: "💰 Infrastructure Scaling",
-    goal: "Expand multi-region Kubernetes clusters for agent workloads with $18,000 budget allocation.",
+    label: "Infrastructure Scaling",
+    goal: "Expand multi-region cloud server clusters for agent workloads with $18,000 budget allocation.",
   },
   {
-    label: "⚡ Security Audit & Penetration",
-    goal: "Conduct quarterly security audit and red-team penetration test with $9,500 budget cap.",
+    label: "Security Audit",
+    goal: "Conduct comprehensive security compliance audit and penetration testing with $9,500 budget cap.",
   },
 ];
 
@@ -66,8 +66,7 @@ export default function KickoffDialog() {
       </DialogTrigger>
       <DialogContent className="border-primary/40 sm:max-w-lg bg-card/95 text-foreground shadow-2xl backdrop-blur-2xl">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 text-lg font-bold">
-            <Sparkles size={18} className="text-primary" />
+          <DialogTitle className="text-lg font-bold">
             Launch New Corporate Initiative
           </DialogTitle>
           <DialogDescription className="text-xs text-muted-foreground">
